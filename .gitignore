@@ -1,0 +1,38 @@
+# --- Python-generated files ---
+__pycache__/
+*.py[oc]
+*.pyo
+*.egg
+build/
+dist/
+wheels/
+*.egg-info
+.pytest_cache/
+
+# --- Virtual environments ---
+.venv/
+venv/
+env/
+
+# --- IDE / Editor ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# --- Environment ---
+.env
+.env.local
+.env.*.local
+
+# --- Coverage ---
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.lcov
+
+# --- Jupyter ---
+.ipynb_checkpoints/

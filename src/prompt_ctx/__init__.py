@@ -1,0 +1,40 @@
+# Copyright 2026 The prompt-ctx Contributors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""prompt-ctx: Structured prompt context management toolkit.
+
+Build production-grade LLM system prompts with:
+- Modular, tagged sections (XML-style partitioning)
+- Dynamic context injection (system info, files, ad-hoc data)
+- Conditional inclusion rules
+- Token counting via tiktoken
+- Multi-model adapter support
+
+Usage:
+    from prompt_ctx import Section, PromptTemplate, Assembler
+    from prompt_ctx.context import SystemInfoProvider
+"""
+
+from prompt_ctx.core.section import Section
+from prompt_ctx.core.template import PromptTemplate
+from prompt_ctx.core.assembler import Assembler
+
+__all__ = ["Section", "PromptTemplate", "Assembler"]
+
+
+def main() -> None:
+    """CLI entry point (delegates to prompt_ctx.cli.main)."""
+    from prompt_ctx.cli import main as _cli_main
+
+    _cli_main()

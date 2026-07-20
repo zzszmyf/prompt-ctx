@@ -1,0 +1,52 @@
+[project]
+name = "prompt-ctx"
+version = "0.1.0"
+description = "Structured prompt context management toolkit for production-grade LLM system prompts"
+readme = "README.md"
+license = { text = "Apache-2.0" }
+authors = [
+    { name = "zzszmyf", email = "zzszmyf@outlook.com" }
+]
+requires-python = ">=3.13"
+keywords = [
+    "prompt-engineering",
+    "llm",
+    "openai",
+    "context-management",
+    "system-prompt",
+    "token-counting",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "openai>=2.46.0",
+    "tiktoken>=0.13.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/zzszmyf/prompt-ctx"
+Repository = "https://github.com/zzszmyf/prompt-ctx"
+Issues = "https://github.com/zzszmyf/prompt-ctx/issues"
+
+[project.scripts]
+prompt-ctx = "prompt_ctx:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]
