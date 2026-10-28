@@ -12,14 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""prompt-ctx: Structured prompt context management toolkit.
+"""prompt-ctx: version, budget, and assemble production system prompts.
 
-Build production-grade LLM system prompts with:
-- Modular, tagged sections (XML-style partitioning)
-- Dynamic context injection (system info, files, ad-hoc data)
-- Conditional inclusion rules
-- Token counting via tiktoken
-- Multi-model adapter support
+Production system prompts are software. prompt-ctx versions, budgets, and
+assembles them so your agent doesn’t burn the context window on dead rules.
 
 Usage:
     from prompt_ctx import Section, PromptTemplate, Assembler
@@ -28,9 +24,9 @@ Usage:
 
 from prompt_ctx.core.section import Section
 from prompt_ctx.core.template import PromptTemplate
-from prompt_ctx.core.assembler import Assembler
+from prompt_ctx.core.assembler import Assembler, AssemblyReport
 
-__all__ = ["Section", "PromptTemplate", "Assembler"]
+__all__ = ["Section", "PromptTemplate", "Assembler", "AssemblyReport"]
 
 
 def main() -> None:

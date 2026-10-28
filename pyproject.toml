@@ -1,7 +1,7 @@
 [project]
 name = "prompt-ctx"
 version = "0.1.0"
-description = "Structured prompt context management toolkit for production-grade LLM system prompts"
+description = "Version, budget, and assemble production system prompts so agents do not burn the context window on dead rules."
 readme = "README.md"
 license = { text = "Apache-2.0" }
 authors = [

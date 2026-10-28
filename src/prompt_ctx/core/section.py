@@ -32,7 +32,8 @@ class Section:
         content: The body text of the section.
         tag: Optional XML-style tag name. When set, the section is wrapped
              in <tag>...</tag> during assembly.
-        priority: Ordering weight (lower = earlier in output).
+        priority: Ordering weight (lower = earlier, and kept first).
+                  When a token budget is set, higher numbers are dropped first.
         enabled: Runtime toggle.
         conditions: Dict of key-value pairs. All must match the assembly
                     context for this section to be included.
