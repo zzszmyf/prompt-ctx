@@ -24,7 +24,9 @@ from pathlib import Path
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="prompt-ctx",
-        description="Prompt context management toolkit",
+        description=(
+            "Version, budget, and assemble production system prompts"
+        ),
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
@@ -40,6 +42,20 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     assemble.add_argument(
         "--output", "-o", type=Path, default=None, help="Write prompt to file instead of stdout"
+    )
+    assemble.add_argument(
+        "--budget",
+        type=int,
+        default=None,
+        help=(
+            "Maximum tokens for the assembled prompt. "
+            "Lowest-priority sections are dropped until it fits."
+        ),
+    )
+    assemble.add_argument(
+        "--report",
+        action="store_true",
+        help="Print kept and dropped sections and how many tokens were saved",
     )
     assemble.add_argument(
         "--count", action="store_true", help="Also print token count"
@@ -63,15 +79,28 @@ def _build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+_CONFIG_LOADS = 0
+
+
 def _load_config(config_path: Path) -> dict:
     """Load 'template' (and optionally 'providers') from a Python config file."""
     import importlib.util
+    import sys
 
-    spec = importlib.util.spec_from_file_location("prompt_config", config_path)
+    global _CONFIG_LOADS
+    _CONFIG_LOADS += 1
+    # Unique name so two configs can be loaded in one process.
+    module_name = f"prompt_ctx_config_{_CONFIG_LOADS}"
+    spec = importlib.util.spec_from_file_location(module_name, config_path)
     if spec is None or spec.loader is None:
         raise ImportError(f"Cannot load config: {config_path}")
     mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
+    sys.modules[module_name] = mod
+    try:
+        spec.loader.exec_module(mod)
+    except Exception:
+        sys.modules.pop(module_name, None)
+        raise
 
     if not hasattr(mod, "template"):
         raise ValueError(f"Config file {config_path} must define 'template'")
@@ -88,22 +117,25 @@ def _cmd_assemble(args: argparse.Namespace) -> int:
     template = config["template"]
     providers = config["providers"]
 
-    from prompt_ctx.core.assembler import Assembler
+    from prompt_ctx.core.assembler import Assembler, format_assembly_report
 
     assembler = Assembler(template, providers=providers)
-    prompt = assembler.assemble(model=args.model)
+    try:
+        report = assembler.assemble_with_report(budget=args.budget, model=args.model)
+    except ValueError as exc:
+        print(f"assemble failed: {exc}", file=sys.stderr)
+        return 1
 
     if args.output:
-        args.output.write_text(prompt)
+        args.output.write_text(report.prompt)
         print(f"Written to {args.output}")
-    else:
-        print(prompt)
+    elif not args.report:
+        print(report.prompt)
 
-    if args.count:
-        from prompt_ctx.tokenizer import count_tokens
-
-        n = count_tokens(prompt, model=args.model)
-        print(f"\n--- Token count ({args.model}): {n} ---")
+    if args.report:
+        print(format_assembly_report(report, config=str(args.config)))
+    elif args.count:
+        print(f"\n--- Token count ({args.model}): {report.tokens_after} ---")
 
     return 0
 

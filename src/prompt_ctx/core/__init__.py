@@ -14,6 +14,6 @@
 
 from prompt_ctx.core.section import Section
 from prompt_ctx.core.template import PromptTemplate
-from prompt_ctx.core.assembler import Assembler
+from prompt_ctx.core.assembler import Assembler, AssemblyReport
 
-__all__ = ["Section", "PromptTemplate", "Assembler"]
+__all__ = ["Section", "PromptTemplate", "Assembler", "AssemblyReport"]
